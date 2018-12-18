@@ -1,0 +1,52 @@
+version: "2"
+
+services:
+  nginx:
+    image: nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - ~/docker_deploy/u:/app
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/sites:/etc/nginx/sites-enabled
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/logs:/var/log/nginx
+    command: [nginx-debug, '-g', 'daemon off;']
+  backend:
+    build:
+      context: .
+      dockerfile: backend.dockerfile
+  # swoole_server:
+  #   build:
+  #     context: .
+  #     dockerfile: swoole_server.dockerfile
+
+  # emails_queue:
+  #   build:
+  #     context: .
+  #     dockerfile: emails_queue.dockerfile
+
+  # notifications_queue:
+  #   build:
+  #     context: .
+  #     dockerfile: notifications_queue.dockerfile
+
+  # product_create_queue:
+  #   build:
+  #     context: .
+  #     dockerfile: product_create_queue.dockerfile
+  # schedule_run:
+  #   build:
+  #     context: .
+  #     dockerfile: schedule_run.dockerfile
+  # elasticsearch:
+  #   image: 'bitnami/elasticsearch:5'
+  #   volumes:
+  #     - ./elasticsearch:/bitnami
+  # memcached:
+  #   image: 'bitnami/memcached:latest'
+  #   ports:
+  #     - '11211:11211'
+  #   environment:
+  #     - MEMCACHED_CACHE_SIZE=128
